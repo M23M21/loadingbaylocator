@@ -1,0 +1,373 @@
+[
+    {
+      "name": "365 Bargains",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "bargains.unit.thirtytwo",
+      "directions": "Enter via the main entrance and proceed to the first floor."
+    },
+    
+    {
+      "name": "The Entertainer",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "toys.games.fun",
+      "directions": "Enter via the main entrance and turn right."
+    },
+    {
+      "name": "CeX",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "electronics.exchange.used",
+      "directions": "Enter via the main entrance and proceed to the North Mall."
+    },
+    {
+      "name": "Bonmarché",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "fashion.women.clothing",
+      "directions": "Enter via the main entrance and head to the left wing."
+    },
+    {
+      "name": "Costa Coffee",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "coffee.relaxation.break",
+      "directions": "Enter via the main entrance and find it near the central seating area."
+    },
+    {
+      "name": "Subway",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "sandwich.fastfood.quick",
+      "directions": "Enter via the main entrance and it's located on the ground floor."
+    },
+    {
+      "name": "Paul's Cafe",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "cafe.relax.enjoy",
+      "directions": "Enter via the main entrance and head to the food court area."
+    },
+    {
+      "name": "Roman's",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "fashion.affordable.trendy",
+      "directions": "Enter via the main entrance and proceed to the fashion section."
+    },
+    {
+      "name": "Pep & Co",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "fashion.value.family",
+      "directions": "Enter via the main entrance and turn right."
+    },
+    {
+      "name": "Henry Rose",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "jewellery.elegant.unique",
+      "directions": "Enter via the main entrance and head to the jewellery section."
+    },
+    {
+      "name": "F Hinds",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "jewellery.traditional.quality",
+      "directions": "Enter via the main entrance and find it near the central area."
+    },
+    {
+      "name": "Iceland",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "groceries.frozen.food",
+      "directions": "Enter via the main entrance and head to the grocery section."
+    },
+    {
+      "name": "Poundland",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "discount.everything.value",
+      "directions": "Enter via the main entrance and turn left."
+    },
+    {
+      "name": "Ryman",
+      "location": "The Octagon Shopping Centre",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "stationery.office.supplies",
+      "directions": "Enter via the main entrance and proceed to the stationery section."
+    },
+    {
+      "name": "Boots",
+      "location": "Coopers Square",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "health.beauty.pharmacy",
+      "directions": "Enter Coopers Square and find it near the main entrance."
+    },
+    {
+      "name": "Primark",
+      "location": "Coopers Square",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "fashion.affordable.trendy",
+      "directions": "Enter Coopers Square and proceed to the fashion section."
+    },
+    {
+      "name": "Marks and Spencer",
+      "location": "Coopers Square",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "department.store.essentials",
+      "directions": "Enter Coopers Square and head to the left wing."
+    },
+    {
+      "name": "WH Smith",
+      "location": "Coopers Square",
+      "openingTime": "9am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "books.stationery.magazines",
+      "directions": "Enter Coopers Square and find it near the central area."
+    },
+    {
+      "name": "Nicwood Logistics",
+      "location": "Unit 1 Fourth Avenue, Centrum 100",
+      "openingTime": "8am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "logistics.warehouse.distribution",
+      "directions": "Located at Centrum 100, accessible via A38."
+    },
+    {
+      "name": "Clarke Industrial Estate",
+      "location": "DE14 1QT",
+      "openingTime": "8am",
+      "restrictions": "None",
+      "town": "Burton upon Trent",
+      "what3words": "industrial.units.flexible",
+      "directions": "Located on Hawkins Lane, near the town center."
+    },
+      {
+        "name": "365 Bargains",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "bargains.unit.thirtytwo",
+        "directions": "Enter via the main entrance and proceed to the first floor."
+      },
+      {
+        "name": "TK Maxx",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "fashion.discounted.goods",
+        "directions": "Enter via the main entrance and head straight to the end of the corridor."
+      },
+      {
+        "name": "The Entertainer",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "toys.games.fun",
+        "directions": "Enter via the main entrance and turn right."
+      },
+      {
+        "name": "CeX",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "electronics.exchange.used",
+        "directions": "Enter via the main entrance and proceed to the North Mall."
+      },
+      {
+        "name": "Bonmarché",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "fashion.women.clothing",
+        "directions": "Enter via the main entrance and head to the left wing."
+      },
+      {
+        "name": "Costa Coffee",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "coffee.relaxation.break",
+        "directions": "Enter via the main entrance and find it near the central seating area."
+      },
+      {
+        "name": "Subway",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "sandwich.fastfood.quick",
+        "directions": "Enter via the main entrance and it's located on the ground floor."
+      },
+      {
+        "name": "Paul's Cafe",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "cafe.relax.enjoy",
+        "directions": "Enter via the main entrance and head to the food court area."
+      },
+      {
+        "name": "Roman's",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "fashion.affordable.trendy",
+        "directions": "Enter via the main entrance and proceed to the fashion section."
+      },
+      {
+        "name": "Pep & Co",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "fashion.value.family",
+        "directions": "Enter via the main entrance and turn right."
+      },
+      {
+        "name": "Henry Rose",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "jewellery.elegant.unique",
+        "directions": "Enter via the main entrance and head to the jewellery section."
+      },
+      {
+        "name": "F Hinds",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "jewellery.traditional.quality",
+        "directions": "Enter via the main entrance and find it near the central area."
+      },
+      {
+        "name": "Iceland",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "groceries.frozen.food",
+        "directions": "Enter via the main entrance and head to the grocery section."
+      },
+      {
+        "name": "Poundland",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "discount.everything.value",
+        "directions": "Enter via the main entrance and turn left."
+      },
+      {
+        "name": "Ryman",
+        "location": "The Octagon Shopping Centre",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "stationery.office.supplies",
+        "directions": "Enter via the main entrance and proceed to the stationery section."
+      },
+      {
+        "name": "Boots",
+        "location": "Coopers Square",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "health.beauty.pharmacy",
+        "directions": "Enter Coopers Square and find it near the main entrance."
+      },
+      {
+        "name": "Primark",
+        "location": "Coopers Square",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "fashion.affordable.trendy",
+        "directions": "Enter Coopers Square and proceed to the fashion section."
+      },
+      {
+        "name": "Marks and Spencer",
+        "location": "Coopers Square",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "department.store.essentials",
+        "directions": "Enter Coopers Square and head to the left wing."
+      },
+      {
+        "name": "WH Smith",
+        "location": "Coopers Square",
+        "openingTime": "9am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "books.stationery.magazines",
+        "directions": "Enter Coopers Square and find it near the central area."
+      },
+      {
+        "name": "Nicwood Logistics",
+        "location": "Unit 1 Fourth Avenue, Centrum 100",
+        "openingTime": "8am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "logistics.warehouse.distribution",
+        "directions": "Located at Centrum 100, accessible via A38."
+      },
+      {
+        "name": "Clarke Industrial Estate",
+        "location": "DE14 1QT",
+        "openingTime": "8am",
+        "restrictions": "None",
+        "town": "Burton upon Trent",
+        "what3words": "industrial.units.flexible",
+        "directions": "Located on Hawkins Lane, near the town center."
+      }
+    ]
+  

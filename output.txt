@@ -1,0 +1,1718 @@
+// Filename: app/index.tsx
+import React from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { useRouter } from 'expo-router';
+import { styles } from '../styles/globalStyles';
+
+export default function Index() {
+  const router = useRouter();
+
+  const handleSignupPress = () => {
+    try {
+      router.push('/SignupScreen');
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+  const handleLoginPress = () => {
+    try {
+      router.push('/LoginScreen');
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+  return (
+    <View style={styles.homeContainer}>
+      <Text style={styles.homeTitle}>Loading Bay Locator</Text>
+      <Image 
+        source={require('../assets/images/loading-bay.jpg')} 
+        style={styles.homeImage}
+      />
+      <TouchableOpacity style={styles.homeButton} onPress={handleSignupPress}>
+        <Text style={styles.homeButtonText}>SIGNUP</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.homeLinkButton} onPress={handleLoginPress}>
+        <Text style={styles.homeLinkText}>ALREADY HAVE AN ACCOUNT?</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+
+// Filename: app/SignupScreen.tsx
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { styles } from '../styles/globalStyles'; // Use global styles
+
+const SignupScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const router = useRouter();
+
+  const handleSignup = () => {
+    // Signup logic here
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Signup</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Full Name"
+        value={fullName}
+        onChangeText={setFullName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
+        <Text style={styles.buttonText}>SIGNUP</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => router.replace('/LoginScreen')}>
+        <Text style={styles.linkText}>ALREADY HAVE AN ACCOUNT?</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default SignupScreen;
+
+
+// Filename: app/PasswordResetScreen.tsx
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import { styles } from '../styles/globalStyles'; // Use global styles
+
+const PasswordResetScreen = () => {
+  const [email, setEmail] = useState('');
+  const router = useRouter();
+
+  const handlePasswordReset = () => {
+    if (!email) {
+      Alert.alert('Error', 'Please enter your email address');
+      return;
+    }
+
+    // Simulating password reset email sent
+    Alert.alert('Success', 'Password reset email sent');
+    router.back();
+  };
+
+  return (
+    <View style={styles.passwordResetContainer}>
+      <Text style={styles.passwordResetTitle}>Password Reset</Text>
+      <Text style={styles.passwordResetSubtitle}>
+        Enter your email address and we'll send you instructions on how to reset your password.
+      </Text>
+      <TextInput
+        style={styles.passwordResetInput}
+        placeholder="Enter email..."
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TouchableOpacity style={styles.passwordResetButton} onPress={handlePasswordReset}>
+        <Text style={styles.passwordResetButtonText}>SUBMIT</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.passwordResetCancelButton} onPress={() => router.back()}>
+        <Text style={styles.passwordResetCancelButtonText}>CANCEL</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default PasswordResetScreen;
+
+
+// Filename: app/+not-found.tsx
+import { Link, Stack } from 'expo-router';
+import { StyleSheet } from 'react-native';
+
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+
+export default function NotFoundScreen() {
+  return (
+    <>
+      <Stack.Screen options={{ title: 'Oops!' }} />
+      <ThemedView style={styles.container}>
+        <ThemedText type="title">This screen doesn't exist.</ThemedText>
+        <Link href="/" style={styles.link}>
+          <ThemedText type="link">Go to home screen!</ThemedText>
+        </Link>
+      </ThemedView>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  link: {
+    marginTop: 15,
+    paddingVertical: 15,
+  },
+});
+
+
+// Filename: app/EditProfileScreen.tsx
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import { auth, firestore } from '../services/firebase'; // Ensure the correct path
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { styles } from '../styles/globalStyles'; // Import your global styles
+
+export default function EditProfileScreen() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const userDoc = doc(firestore, 'users', user.uid);
+          const userSnapshot = await getDoc(userDoc);
+          if (userSnapshot.exists()) {
+            const data = userSnapshot.data();
+            setName(data.name || ''); // Provide a default empty string if name is undefined
+            setEmail(data.email || ''); // Provide a default empty string if email is undefined
+          }
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            Alert.alert('Error', error.message);
+          } else {
+            Alert.alert('Error', 'An unknown error occurred while fetching data');
+          }
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleSave = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        const userDoc = doc(firestore, 'users', user.uid);
+        await updateDoc(userDoc, { name, email });
+        Alert.alert('Success', 'Profile updated successfully');
+        router.replace('/home'); // Navigate back to the home screen after saving
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          Alert.alert('Error', error.message);
+        } else {
+          Alert.alert('Error', 'An unknown error occurred while updating the profile');
+        }
+      }
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Edit Profile</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Full Name"
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSave}>
+        <Text style={styles.buttonText}>Save</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+
+// Filename: app/_layout.tsx
+import { Stack } from 'expo-router';
+import { AuthProvider } from '../AuthContext';
+
+export default function Layout() {
+  return (
+    <AuthProvider>
+    <Stack>
+      <Stack.Screen name="index" options={{ title: 'Home' }} />
+      <Stack.Screen name="LoginScreen" options={{ title: 'Login' }} />
+      <Stack.Screen name="SignupScreen" options={{ title: 'Sign Up' }} />
+      <Stack.Screen name="PasswordResetScreen" options={{ title: 'Reset Password' }} />
+      <Stack.Screen name="ResultScreen" options={{ title: 'Result' }} />
+      <Stack.Screen name="EditProfileScreen" options={{ title: 'Edit Profile' }} />
+    </Stack>
+    </AuthProvider>
+  );
+}
+
+
+// Filename: app/ResultScreen.tsx
+import React from 'react';
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Linking, Image } from 'react-native';
+import { useLocalSearchParams, useRouter, Link } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { styles } from '../styles/globalStyles'; // Import global styles
+
+type LoadingBayInfo = {
+  id: string;
+  name: string;
+  location: string;
+  openingTime: string;
+  restrictions: string;
+  what3words: string;
+  directions: string;
+};
+
+const ResultScreen = () => {
+  const { results } = useLocalSearchParams();
+  const parsedResults: LoadingBayInfo[] = typeof results === 'string' ? JSON.parse(results) : [];
+  const router = useRouter();
+
+  const handleNavigation = (what3words: string) => {
+    const url = `https://what3words.com/${what3words}`;
+    Linking.openURL(url);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <View style={styles.headerCenter}>
+          <Text style={styles.headerTitle}>RESULT</Text>
+        </View>
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Image
+          source={require('../assets/images/loading-bay.jpg')}
+          style={styles.image}
+        />
+        {parsedResults.map((item) => (
+          <>
+            <View key={`${item.id}-what3words`} style={styles.card}>
+              <Text style={styles.infoLabel}>Loading Bay is:</Text>
+              <TouchableOpacity onPress={() => handleNavigation(item.what3words)}>
+                <Text style={styles.infoText}>{item.what3words}</Text>
+              </TouchableOpacity>
+            </View>
+            <View key={`${item.id}-openingTime`} style={styles.card}>
+              <Text style={styles.infoLabel}>Opening Time:</Text>
+              <Text style={styles.infoText}>{item.openingTime}</Text>
+            </View>
+            <View key={`${item.id}-restrictions`} style={styles.card}>
+              <Text style={styles.infoLabel}>Restrictions:</Text>
+              <Text style={styles.infoText}>{item.restrictions}</Text>
+            </View>
+            <View key={`${item.id}-location`} style={styles.card}>
+              <Text style={styles.infoLabel}>Location:</Text>
+              <Text style={styles.infoText}>{item.location}</Text>
+            </View>
+            <View key={`${item.id}-directions`} style={styles.card}>
+              <Text style={styles.infoLabel}>Directions:</Text>
+              <Text style={styles.infoText}>{item.directions}</Text>
+            </View>
+          </>
+        ))}
+      </ScrollView>
+      <View style={styles.footer}>
+        <TouchableOpacity 
+          style={styles.footerItem} 
+          onPress={() => handleNavigation(parsedResults[0]?.what3words)}
+        >
+          <Ionicons name="car" size={24} color="#3498db" />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.footerItem} 
+          onPress={() => handleNavigation(parsedResults[0]?.what3words)}
+        >
+          <Ionicons name="walk" size={24} color="#3498db" />
+        </TouchableOpacity>
+        <Link href="/(tabs)/home" asChild>
+          <TouchableOpacity style={styles.footerItem}>
+            <Ionicons name="search" size={24} color="#3498db" />
+          </TouchableOpacity>
+        </Link>
+        <TouchableOpacity style={styles.footerItem}>
+          <Text style={styles.logoutText}>LOG OUT</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default ResultScreen;
+
+
+// Filename: app/+html.tsx
+import { ScrollViewStyleReset } from 'expo-router/html';
+import { type PropsWithChildren } from 'react';
+
+/**
+ * This file is web-only and used to configure the root HTML for every web page during static rendering.
+ * The contents of this function only run in Node.js environments and do not have access to the DOM or browser APIs.
+ */
+export default function Root({ children }: PropsWithChildren) {
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        {/*
+          Disable body scrolling on web. This makes ScrollView components work closer to how they do on native.
+          However, body scrolling is often nice to have for mobile web. If you want to enable it, remove this line.
+        */}
+        <ScrollViewStyleReset />
+
+        {/* Using raw CSS styles as an escape-hatch to ensure the background color never flickers in dark-mode. */}
+        <style dangerouslySetInnerHTML={{ __html: responsiveBackground }} />
+        {/* Add any additional <head> elements that you want globally available on web... */}
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+
+const responsiveBackground = `
+body {
+  background-color: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #000;
+  }
+}`;
+
+
+// Filename: app/LoginScreen.tsx
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import { auth } from '../services/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { styles } from '../styles/globalStyles';
+
+const LoginScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      Alert.alert('Success', 'Logged in successfully');
+      router.replace('/home');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>LOGIN</Text>
+      </TouchableOpacity>
+      <View style={styles.loginLinkContainer}>
+        <TouchableOpacity onPress={() => router.replace('/PasswordResetScreen')}>
+          <Text style={styles.linkText}>FORGOT PASSWORD?</Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity onPress={() => router.replace('/SignupScreen')}>
+        <Text style={styles.signupLink}>SIGNUP</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default LoginScreen;
+
+
+// Filename: app/(tabs)/home.tsx
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import { firestore } from '../../services/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { styles } from '../../styles/globalStyles';  // Import global styles
+
+type LoadingBayInfo = {
+  id: string;
+  directions: string;
+  location: string;
+  name: string;
+  openingTime: string;
+  restrictions: string;
+  town: string;
+  what3words: string;
+};
+
+export default function HomeScreen() {
+  const [shopName, setShopName] = useState('');
+  const [town, setTown] = useState('');
+  const router = useRouter();
+
+  const handleSearch = async () => {
+    try {
+      const results: LoadingBayInfo[] = [];
+      const q = query(
+        collection(firestore, 'loadingBays'),
+        where('name', '==', shopName),
+        where('town', '==', town)
+      );
+
+      console.log('Executing query with:', { shopName, town });
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        console.log('Document data:', doc.data());
+        results.push({ id: doc.id, ...doc.data() } as LoadingBayInfo);
+      });
+
+      console.log('Results:', results);
+
+      if (results.length > 0) {
+        router.push({
+          pathname: '/ResultScreen',
+          params: { results: JSON.stringify(results) },
+        });
+      } else {
+        Alert.alert('No Results', 'No matching loading bays found.');
+      }
+    } catch (error) {
+      console.error('Error searching Firestore:', error);
+      Alert.alert('Error', 'An error occurred while searching. Please try again.');
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Loading Bay Locator</Text>
+      <Image
+        source={require('../../assets/images/loading-bay.jpg')}
+        style={styles.image}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter shop/warehouse name..."
+        value={shopName}
+        onChangeText={setShopName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter town name..."
+        value={town}
+        onChangeText={setTown}
+      />
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={handleSearch}
+      >
+        <Text style={styles.buttonText}>Search</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+}
+
+
+// Filename: app/(tabs)/search.tsx
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { useRouter } from 'expo-router';
+import { firestore } from '../../services/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { styles } from '../../styles/globalStyles';
+
+type LoadingBayInfo = {
+  id: string;
+  name: string;
+  location: string;
+  openingTime: string;
+  restrictions: string;
+  town: string;
+  what3words: string;
+  directions: string;
+};
+
+export default function SearchScreen() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [town, setTown] = useState('');
+  const router = useRouter();
+
+  const handleSearch = async () => {
+    try {
+      const results: LoadingBayInfo[] = [];
+      const q = query(
+        collection(firestore, 'loadingBays'),
+        where('name', '==', searchTerm),
+        where('town', '==', town)
+      );
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        results.push({ id: doc.id, ...doc.data() } as LoadingBayInfo);
+      });
+
+      if (results.length > 0) {
+        router.push({
+          pathname: '/ResultScreen',
+          params: { results: JSON.stringify(results) },
+        });
+      } else {
+        alert('No matching loading bays found.');
+      }
+    } catch (error) {
+      console.error('Error searching Firestore:', error);
+      alert('An error occurred while searching. Please try again.');
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Loading Bay Locator</Text>
+      <Image 
+        source={require('../../assets/images/loading-bay.jpg')} 
+        style={styles.homeImage}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter shop/warehouse name..."
+        value={searchTerm}
+        onChangeText={setSearchTerm}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter town name..."
+        value={town}
+        onChangeText={setTown}
+      />
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={handleSearch}
+      >
+        <Text style={styles.buttonText}>Search</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+}
+
+
+// Filename: app/(tabs)/saved.tsx
+import React from 'react';
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
+
+export default function SavedScreen() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Saved Loading Bays</Text>
+      {/* Add a list or grid of saved loading bays here */}
+      <Text style={styles.placeholder}>Your saved loading bays will appear here.</Text>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  placeholder: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#888',
+  },
+});
+
+// Filename: app/(tabs)/profile.tsx
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useAuth } from '../../AuthContext'; // Ensure correct import path
+import { auth, firestore } from '../../services/firebase'; // Ensure correct import path
+import { doc, getDoc } from 'firebase/firestore';
+import { styles } from '../../styles/globalStyles'; // Ensure correct import path
+
+type UserData = {
+  name: string;
+  email: string;
+};
+
+export default function ProfileScreen() {
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const router = useRouter();
+  const { user, signOut } = useAuth();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        try {
+          const userDoc = doc(firestore, 'users', user.uid);
+          const userSnapshot = await getDoc(userDoc);
+          if (userSnapshot.exists()) {
+            const data = userSnapshot.data() as UserData;
+            setUserData(data);
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.replace('/');
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
+
+  const handleEditProfile = () => {
+    router.push('/EditProfileScreen');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Profile</Text>
+      {userData ? (
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoText}>Name: {userData.name}</Text>
+          <Text style={styles.infoText}>Email: {userData.email}</Text>
+        </View>
+      ) : (
+        <Text>Loading...</Text>
+      )}
+      <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
+        <Text style={styles.buttonText}>Edit Profile</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Log Out</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+
+// Filename: app/(tabs)/help.tsx
+import React from 'react';
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { styles } from '../../styles/globalStyles';  // Use global styles
+
+export default function HelpScreen() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.title}>Help & Support</Text>
+        <TouchableOpacity style={styles.faqItem}>
+          <Text style={styles.faqQuestion}>How do I find a loading bay?</Text>
+          <Text style={styles.faqAnswer}>Use the search function or browse by location to find available loading bays.</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.faqItem}>
+          <Text style={styles.faqQuestion}>Can I save my favorite loading bays?</Text>
+          <Text style={styles.faqAnswer}>Yes, you can save loading bays by tapping the bookmark icon on the bay details screen.</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.contactButton}>
+          <Text style={styles.contactButtonText}>Contact Support</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+
+// Filename: app/(tabs)/_layout.tsx
+import { Tabs } from 'expo-router';
+import React from 'react';
+
+import { TabBarIcon } from '@/components/navigation/TabBarIcon';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
+
+export default function TabLayout() {
+  const colorScheme = useColorScheme();
+
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        headerShown: false,
+      }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="explore"
+        options={{
+          title: 'Explore',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}
+
+
+// Filename: components/ExternalLink.tsx
+import { Link } from 'expo-router';
+import { openBrowserAsync } from 'expo-web-browser';
+import { type ComponentProps } from 'react';
+import { Platform } from 'react-native';
+
+type Props = Omit<ComponentProps<typeof Link>, 'href'> & { href: string };
+
+export function ExternalLink({ href, ...rest }: Props) {
+  return (
+    <Link
+      target="_blank"
+      {...rest}
+      href={href}
+      onPress={async (event) => {
+        if (Platform.OS !== 'web') {
+          // Prevent the default behavior of linking to the default browser on native.
+          event.preventDefault();
+          // Open the link in an in-app browser.
+          await openBrowserAsync(href);
+        }
+      }}
+    />
+  );
+}
+
+
+// Filename: components/ThemedText.tsx
+import { Text, type TextProps, StyleSheet } from 'react-native';
+
+import { useThemeColor } from '@/hooks/useThemeColor';
+
+export type ThemedTextProps = TextProps & {
+  lightColor?: string;
+  darkColor?: string;
+  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
+};
+
+export function ThemedText({
+  style,
+  lightColor,
+  darkColor,
+  type = 'default',
+  ...rest
+}: ThemedTextProps) {
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+
+  return (
+    <Text
+      style={[
+        { color },
+        type === 'default' ? styles.default : undefined,
+        type === 'title' ? styles.title : undefined,
+        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
+        type === 'subtitle' ? styles.subtitle : undefined,
+        type === 'link' ? styles.link : undefined,
+        style,
+      ]}
+      {...rest}
+    />
+  );
+}
+
+const styles = StyleSheet.create({
+  default: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  defaultSemiBold: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: '600',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    lineHeight: 32,
+  },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  link: {
+    lineHeight: 30,
+    fontSize: 16,
+    color: '#0a7ea4',
+  },
+});
+
+
+// Filename: components/ThemedView.tsx
+import { View, type ViewProps } from 'react-native';
+
+import { useThemeColor } from '@/hooks/useThemeColor';
+
+export type ThemedViewProps = ViewProps & {
+  lightColor?: string;
+  darkColor?: string;
+};
+
+export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+
+  return <View style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+
+// Filename: components/HelloWave.tsx
+import { StyleSheet } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+} from 'react-native-reanimated';
+
+import { ThemedText } from '@/components/ThemedText';
+
+export function HelloWave() {
+  const rotationAnimation = useSharedValue(0);
+
+  rotationAnimation.value = withRepeat(
+    withSequence(withTiming(25, { duration: 150 }), withTiming(0, { duration: 150 })),
+    4 // Run the animation 4 times
+  );
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotationAnimation.value}deg` }],
+  }));
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <ThemedText style={styles.text}>👋</ThemedText>
+    </Animated.View>
+  );
+}
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 28,
+    lineHeight: 32,
+    marginTop: -6,
+  },
+});
+
+
+// Filename: components/ParallaxScrollView.tsx
+import type { PropsWithChildren, ReactElement } from 'react';
+import { StyleSheet, useColorScheme } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedRef,
+  useAnimatedStyle,
+  useScrollViewOffset,
+} from 'react-native-reanimated';
+
+import { ThemedView } from '@/components/ThemedView';
+
+const HEADER_HEIGHT = 250;
+
+type Props = PropsWithChildren<{
+  headerImage: ReactElement;
+  headerBackgroundColor: { dark: string; light: string };
+}>;
+
+export default function ParallaxScrollView({
+  children,
+  headerImage,
+  headerBackgroundColor,
+}: Props) {
+  const colorScheme = useColorScheme() ?? 'light';
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const scrollOffset = useScrollViewOffset(scrollRef);
+
+  const headerAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: interpolate(
+            scrollOffset.value,
+            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
+            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75]
+          ),
+        },
+        {
+          scale: interpolate(scrollOffset.value, [-HEADER_HEIGHT, 0, HEADER_HEIGHT], [2, 1, 1]),
+        },
+      ],
+    };
+  });
+
+  return (
+    <ThemedView style={styles.container}>
+      <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
+        <Animated.View
+          style={[
+            styles.header,
+            { backgroundColor: headerBackgroundColor[colorScheme] },
+            headerAnimatedStyle,
+          ]}>
+          {headerImage}
+        </Animated.View>
+        <ThemedView style={styles.content}>{children}</ThemedView>
+      </Animated.ScrollView>
+    </ThemedView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    height: 250,
+    overflow: 'hidden',
+  },
+  content: {
+    flex: 1,
+    padding: 32,
+    gap: 16,
+    overflow: 'hidden',
+  },
+});
+
+
+// Filename: components/Collapsible.tsx
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { PropsWithChildren, useState } from 'react';
+import { StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { Colors } from '@/constants/Colors';
+
+export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const theme = useColorScheme() ?? 'light';
+
+  return (
+    <ThemedView>
+      <TouchableOpacity
+        style={styles.heading}
+        onPress={() => setIsOpen((value) => !value)}
+        activeOpacity={0.8}>
+        <Ionicons
+          name={isOpen ? 'chevron-down' : 'chevron-forward-outline'}
+          size={18}
+          color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
+        />
+        <ThemedText type="defaultSemiBold">{title}</ThemedText>
+      </TouchableOpacity>
+      {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
+    </ThemedView>
+  );
+}
+
+const styles = StyleSheet.create({
+  heading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  content: {
+    marginTop: 6,
+    marginLeft: 24,
+  },
+});
+
+
+// Filename: components/navigation/TabBarIcon.tsx
+// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { type IconProps } from '@expo/vector-icons/build/createIconSet';
+import { type ComponentProps } from 'react';
+
+export function TabBarIcon({ style, ...rest }: IconProps<ComponentProps<typeof Ionicons>['name']>) {
+  return <Ionicons size={28} style={[{ marginBottom: -3 }, style]} {...rest} />;
+}
+
+
+// Filename: components/__tests__/ThemedText-test.tsx
+import * as React from 'react';
+import renderer from 'react-test-renderer';
+
+import { ThemedText } from '../ThemedText';
+
+it(`renders correctly`, () => {
+  const tree = renderer.create(<ThemedText>Snapshot test!</ThemedText>).toJSON();
+
+  expect(tree).toMatchSnapshot();
+});
+
+
+// Filename: constants/Colors.ts
+/**
+ * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
+ * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ */
+
+const tintColorLight = '#0a7ea4';
+const tintColorDark = '#fff';
+
+export const Colors = {
+  light: {
+    text: '#11181C',
+    background: '#fff',
+    tint: tintColorLight,
+    icon: '#687076',
+    tabIconDefault: '#687076',
+    tabIconSelected: tintColorLight,
+  },
+  dark: {
+    text: '#ECEDEE',
+    background: '#151718',
+    tint: tintColorDark,
+    icon: '#9BA1A6',
+    tabIconDefault: '#9BA1A6',
+    tabIconSelected: tintColorDark,
+  },
+};
+
+
+// Filename: hooks/useColorScheme.web.ts
+// NOTE: The default React Native styling doesn't support server rendering.
+// Server rendered styles should not change between the first render of the HTML
+// and the first render on the client. Typically, web developers will use CSS media queries
+// to render different styles on the client and server, these aren't directly supported in React Native
+// but can be achieved using a styling library like Nativewind.
+export function useColorScheme() {
+  return 'light';
+}
+
+
+// Filename: hooks/useThemeColor.ts
+/**
+ * Learn more about light and dark modes:
+ * https://docs.expo.dev/guides/color-schemes/
+ */
+
+import { useColorScheme } from 'react-native';
+
+import { Colors } from '@/constants/Colors';
+
+export function useThemeColor(
+  props: { light?: string; dark?: string },
+  colorName: keyof typeof Colors.light & keyof typeof Colors.dark
+) {
+  const theme = useColorScheme() ?? 'light';
+  const colorFromProps = props[theme];
+
+  if (colorFromProps) {
+    return colorFromProps;
+  } else {
+    return Colors[theme][colorName];
+  }
+}
+
+
+// Filename: hooks/useColorScheme.ts
+export { useColorScheme } from 'react-native';
+
+
+// Filename: services/what3words.js
+const API_KEY = 'TO0J916D';
+const BASE_URL = 'https://api.what3words.com/v3';
+
+export const convertToCoordinates = async (words) => {
+  try {
+    const response = await fetch(`${BASE_URL}/convert-to-coordinates?words=${words}&key=${API_KEY}`);
+    const data = await response.json();
+    if (data.coordinates) {
+      return {
+        lat: data.coordinates.lat,
+        lng: data.coordinates.lng,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error('Error converting to coordinates:', error);
+    return null;
+  }
+};
+
+export const convertToWords = async (lat, lng) => {
+  try {
+    const response = await fetch(`${BASE_URL}/convert-to-3wa?coordinates=${lat},${lng}&key=${API_KEY}`);
+    const data = await response.json();
+    if (data.words) {
+      return data.words;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error converting to words:', error);
+    return null;
+  }
+};
+
+
+// Filename: services/firebase.js
+// services/firebase.js
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore'; // or getDatabase for Realtime Database
+
+const firebaseConfig = {
+  apiKey: "AIzaSyANg6pLx0zR5Ajg4FFjFDPvaxPNy1O2njU",
+  authDomain: "loadinbaylocator.firebaseapp.com",
+  projectId: "loadinbaylocator",
+  storageBucket: "loadinbaylocator.appspot.com",
+  messagingSenderId: "836229091487",
+  appId: "1:836229091487:web:45453d6bb97f00ce1892aa",
+  measurementId: "G-SRQMY42FM6"
+};
+import { sendPasswordResetEmail } from 'firebase/auth';
+
+const handlePasswordReset = () => {
+  if (!email) {
+    Alert.alert('Error', 'Please enter your email address');
+    return;
+  }
+
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      Alert.alert('Success', 'Password reset email sent');
+      router.back();
+    })
+    .catch((error) => {
+      Alert.alert('Error', error.message);
+    });
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase services
+const auth = getAuth(app);
+const firestore = getFirestore(app); // or use getDatabase for Realtime Database
+
+export { auth, firestore };
+
+// Filename: styles/globalStyles.js
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  // General container styles
+  container: {
+    flex: 1,
+    backgroundColor: '#3A6BD8', // Default blue background for Signup and Login
+    padding: 20,
+    justifyContent: 'center', // Center the content
+  },
+
+  // Home screen styles
+  homeContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF', // White background for the home screen
+    justifyContent: 'flex-start', // Align content to the top
+    padding: 20,
+  },
+  homeTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#3A6BD8', // Blue color for the title text on home screen
+    textAlign: 'center',
+    marginVertical: 10, // Adjust spacing around the title
+    backgroundColor: '#3A6BD8', // Blue background similar to the prototype
+    paddingVertical: 20, // Increase padding for better appearance
+    width: '100%', // Stretch across the screen
+  },
+  homeImage: {
+    width: '100%',
+    height: 150,
+    resizeMode: 'cover',
+    marginBottom: 20,
+  },
+  homeButton: {
+    backgroundColor: '#007bff', // Blue button background on home screen
+    paddingVertical: 15,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  homeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  homeLinkButton: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  homeLinkText: {
+    color: '#2ecc71', // Green color for the link text on home screen
+    fontWeight: 'bold',
+  },
+
+  // Password Reset screen styles
+  passwordResetContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF', // White background for the password reset screen
+    alignItems: 'center',
+    padding: 20,
+  },
+  passwordResetTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'left',  // Align to the left
+    width: '100%',
+  },
+  passwordResetSubtitle: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'left', // Align to the left
+    marginBottom: 20,
+    width: '100%',
+  },
+  passwordResetInput: {
+    width: '100%',
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  passwordResetButton: {
+    backgroundColor: '#2ecc71', // Green button background for the password reset screen
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  passwordResetButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  passwordResetCancelButton: {
+    marginTop: 10,
+  },
+  passwordResetCancelButtonText: {
+    color: '#000', // Black color for the cancel button text
+    fontSize: 16,
+  },
+
+  // Text styles
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#fff', // White color for the title to stand out against the blue background
+    textAlign: 'center',
+    marginBottom: 40, // Adjust the spacing to match the prototype
+    marginTop: 30, // Move the title closer to the top
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#7f8c8d',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  linkText: {
+    color: '#ffffff', // White text for links
+    textAlign: 'center',
+    marginTop: 'auto',
+    marginBottom: 50, // Increase margin to move the text further down
+  },
+  whiteText: {
+    color: '#fff',
+  },
+  greenText: {
+    color: '#2ecc71',
+  },
+  grayText: {
+    color: '#7f8c8d',
+  },
+  logoutText: {
+    color: '#3498db',  // Blue color for logout text in the footer
+    fontWeight: 'bold',
+  },
+  infoLabel: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#333',  // Dark color for labels inside the cards
+    marginBottom: 3,
+  },
+  infoText: {
+    fontSize: 14,  // Reduced font size to make text fit better
+    color: '#555',  // Slightly lighter color for the information text
+  },
+  infoLabelWhite: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginTop: 10,
+    color: '#fff',  // White color for labels inside the blue section
+  },
+  infoTextWhite: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: '#fff',  // White color for text inside the blue section
+  },
+  headerTitle: {
+    color: '#fff',  // White color for the header title
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',  // Centered text
+  },
+
+  // Input styles
+  input: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 20,
+    width: '100%',
+    height: 40,
+  },
+
+  // Button styles
+  button: {
+    backgroundColor: '#2ecc71', // Green button to match the prototype
+    paddingVertical: 15,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginVertical: 10, // Ensure consistent margin
+  },
+  greenButton: {
+    backgroundColor: '#2ecc71',
+    paddingVertical: 12,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+
+  // Image styles
+  image: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 20,
+  },
+
+  // Footer styles
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    paddingVertical: 8,  // Reduced padding to make footer more compact
+    backgroundColor: '#fff',  // White background for the footer
+    position: 'absolute',
+    bottom: 0,  // Footer at the bottom
+    left: 0,
+    right: 0,
+  },
+  footerItem: {
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: 12,
+    color: '#7f8c8d',
+  },
+
+  // Header styles
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#007bff',  // Blue background for the header
+  },
+  headerCenter: {
+    flex: 1,  // Center the title in the header
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backButton: {
+    marginRight: 10,
+  },
+
+  // Card styles
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,  // Padding inside cards
+    marginVertical: 5,  // Vertical margin between cards
+    marginHorizontal: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+
+  // Info section styles
+  infoSection: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',  // Added borders for better separation
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 80,  // Ensure footer doesn't overlap content
+  },
+  faqItem: {
+    marginBottom: 20,
+  },
+  faqQuestion: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  faqAnswer: {
+    fontSize: 16,
+    color: '#666',
+  },
+  contactButton: {
+    backgroundColor: '#3498db',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  contactButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  infoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  editButton: {
+    backgroundColor: '#3498db',
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  logoutButton: {
+    backgroundColor: '#e74c3c',
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  scrollView: {
+    flex: 1,
+  },
+
+  // Link Button Styles (for the green link with the rectangular box)
+  linkButton: {
+    borderColor: '#2ecc71', // Green border to match the prototype
+    borderWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+
+  // Specific for Login Screen spacing
+  loginLinkContainer: {
+    marginTop: 40, // Space between login button and Forgot Password link
+    marginBottom: 10, // Space between Forgot Password link and Signup link
+  },
+  
+  signupLink: {
+    marginBottom: 50, // Space to push the Signup link to the bottom
+    textAlign: 'center',
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+
+  // Search Screen specific styles
+  searchContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF', // White background for the search screen
+    justifyContent: 'flex-start',
+  },
+  searchTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF', // White color for the title to stand out against the blue background
+    textAlign: 'center',
+    marginVertical: 10, // Adjust spacing around the title
+    backgroundColor: '#3A6BD8', // Blue background similar to the prototype
+    paddingVertical: 20, // Increase padding for better appearance
+    width: '100%', // Stretch across the screen
+  },
+  searchImage: {
+    width: '100%',
+    height: 150,
+    resizeMode: 'cover',
+    marginBottom: 20,
+  },
+});
+
+
+
+// Filename: scripts/reset-project.js
+#!/usr/bin/env node
+
+/**
+ * This script is used to reset the project to a blank state.
+ * It moves the /app directory to /app-example and creates a new /app directory with an index.tsx and _layout.tsx file.
+ * You can remove the `reset-project` script from package.json and safely delete this file after running it.
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const root = process.cwd();
+const oldDirPath = path.join(root, 'app');
+const newDirPath = path.join(root, 'app-example');
+const newAppDirPath = path.join(root, 'app');
+
+const indexContent = `import { Text, View } from "react-native";
+
+export default function Index() {
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text>Edit app/index.tsx to edit this screen.</Text>
+    </View>
+  );
+}
+`;
+
+const layoutContent = `import { Stack } from "expo-router";
+
+export default function RootLayout() {
+  return (
+    <Stack>
+      <Stack.Screen name="index" />
+    </Stack>
+  );
+}
+`;
+
+fs.rename(oldDirPath, newDirPath, (error) => {
+  if (error) {
+    return console.error(`Error renaming directory: ${error}`);
+  }
+  console.log('/app moved to /app-example.');
+
+  fs.mkdir(newAppDirPath, { recursive: true }, (error) => {
+    if (error) {
+      return console.error(`Error creating new app directory: ${error}`);
+    }
+    console.log('New /app directory created.');
+
+    const indexPath = path.join(newAppDirPath, 'index.tsx');
+    fs.writeFile(indexPath, indexContent, (error) => {
+      if (error) {
+        return console.error(`Error creating index.tsx: ${error}`);
+      }
+      console.log('app/index.tsx created.');
+
+      const layoutPath = path.join(newAppDirPath, '_layout.tsx');
+      fs.writeFile(layoutPath, layoutContent, (error) => {
+        if (error) {
+          return console.error(`Error creating _layout.tsx: ${error}`);
+        }
+        console.log('app/_layout.tsx created.');
+      });
+    });
+  });
+});
+
+
