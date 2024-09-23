@@ -1,58 +1,45 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { View, Text } from 'react-native'; // Import View and Text from react-native
-import { auth } from './services/firebase'; // Ensure the correct path to your Firebase setup
-import { onAuthStateChanged, User, signOut as firebaseSignOut } from 'firebase/auth';
+// Filename: app/AuthContext.tsx
 
-type AuthContextType = {
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User, onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
+import { auth } from './services/firebase'; // Ensure the correct path to your firebase.js file
+
+interface AuthContextProps {
   user: User | null;
-  loading: boolean;
+  isLoading: boolean;
   signOut: () => Promise<void>;
-};
+}
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setIsLoading(false);
     });
 
-    return unsubscribe; // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
 
   const signOut = async () => {
-    setLoading(true);
-    try {
-      await firebaseSignOut(auth);
-      setUser(null);
-    } catch (error) {
-      console.error('Error signing out:', error);
-    } finally {
-      setLoading(false);
-    }
+    await firebaseSignOut(auth);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signOut }}>
-      {!loading ? children : <LoadingScreen />}
+    <AuthContext.Provider value={{ user, isLoading, signOut }}>
+      {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextProps => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
-
-const LoadingScreen = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Loading...</Text>
-  </View>
-);
