@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useAuth } from '../../AuthContext'; // Ensure correct import path
-import { auth, firestore } from '../../services/firebase'; // Ensure correct import path
+import { useAuth } from '../../AuthContext';
+import { firestore } from '../../services/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { styles } from '../../styles/globalStyles'; // Ensure correct import path
+import { styles } from '../../styles/globalStyles';
 
 type UserData = {
   name: string;
@@ -50,18 +50,25 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+      {/* Header */}
+      <View style={styles.commonHeader}>
+        <Text style={styles.commonHeaderTitle}>Profile</Text>
+      </View>
+
+      {/* Content */}
       {userData ? (
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Name: {userData.name}</Text>
-          <Text style={styles.infoText}>Email: {userData.email}</Text>
+        <View style={styles.profileInfoContainer}>
+          <Text style={styles.profileInfoText}>Name: {userData.name}</Text>
+          <Text style={styles.profileInfoText}>Email: {userData.email}</Text>
         </View>
       ) : (
         <Text>Loading...</Text>
       )}
+
       <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
         <Text style={styles.buttonText}>Edit Profile</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.buttonText}>Log Out</Text>
       </TouchableOpacity>

@@ -1,67 +1,141 @@
-import { StyleSheet } from 'react-native';
+// styles/globalStyles.js
+
+import { StyleSheet, Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
-  // General container styles
+  // =======================
+  // ===== General Styles =====
+  // =======================
   container: {
     flex: 1,
-    backgroundColor: '#3A6BD8', // Default blue background for Signup and Login
-    padding: 20,
-    justifyContent: 'center', // Center the content
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'flex-start',
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 80,
+    paddingTop: 20, // Adăugat pentru a evita suprapunerea conținutului cu header-ul
+  },
+  infoTextCenter: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  infoText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  placeholder: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#888',
   },
 
-  // Home screen styles
-  homeContainer: {
+  // =======================
+  // ===== Header Styles =====
+  // =======================
+  // Stiluri utilizate de paginile index, signup, login
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#3A6BD8',
+  },
+  headerCenter: {
     flex: 1,
-    backgroundColor: '#FFFFFF', // White background for the home screen
-    justifyContent: 'flex-start', // Align content to the top
-    padding: 20,
-    paddingTop: 40, // Add more padding to the top if needed
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  homeTitle: {
-    fontSize: 28,
+  backButton: {
+    padding: 10,
+    marginRight: 10,
+  },
+  backButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  headerTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#3A6BD8', // Blue color for the title text on the home screen
+    color: '#FFFFFF',
     textAlign: 'center',
-    marginVertical: 10, // Adjust spacing around the title
-    paddingVertical: 0, // No padding needed for title
-    backgroundColor: 'transparent', // Remove background color
   },
-  homeImage: {
+
+  // Stiluri comune pentru header utilizate de celelalte pagini
+  commonHeader: {
+    backgroundColor: '#3A6BD8',
+    paddingVertical: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
-    height: undefined, // Let the height adjust based on the aspect ratio
-    aspectRatio: 16 / 9, // Maintain aspect ratio (adjust as needed)
-    resizeMode: 'cover',
-    marginBottom: 20,
   },
-  homeButton: {
-    backgroundColor: '#007bff', // Blue button background on the home screen
+  commonHeaderTitle: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  // =======================
+  // ===== Authentication Styles =====
+  // =======================
+  authContainer: {
+    flex: 1,
+    backgroundColor: '#3A6BD8',
+    padding: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  authTitle: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 70,
+    textAlign: 'center',
+  },
+  authInput: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 20,
+    width: '100%',
+  },
+  authButton: {
+    backgroundColor: '#2ecc71',
     paddingVertical: 15,
     borderRadius: 5,
-    width: '80%', // Adjust width for better spacing
+    width: '100%',
     alignItems: 'center',
     marginVertical: 10,
-    alignSelf: 'center', // Center the button
   },
-  homeButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  authLinkText: {
+    color: '#FFFFFF',
     textAlign: 'center',
+    marginTop: 180,
+    fontWeight: 'bold',
   },
-  homeLinkButton: {
-    marginTop: 20,
-    alignItems: 'center',
-    alignSelf: 'center', // Center the text link
+  loginLinkContainer: {
+    marginTop: 250,
+    marginBottom: 10,
   },
-  homeLinkText: {
-    color: '#2ecc71', // Green color for the link text on the home screen
+  signupLink: {
+    marginBottom: 40,
+    textAlign: 'center',
+    color: '#ffffff',
     fontWeight: 'bold',
   },
 
-  // Password Reset screen styles
+  // =======================
+  // ===== Password Reset Styles =====
+  // =======================
   passwordResetContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF', // White background for the password reset screen
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     padding: 20,
   },
@@ -69,13 +143,13 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    textAlign: 'left', // Align to the left
+    textAlign: 'left',
     width: '100%',
   },
   passwordResetSubtitle: {
     fontSize: 14,
     color: '#555',
-    textAlign: 'left', // Align to the left
+    textAlign: 'left',
     marginBottom: 20,
     width: '100%',
   },
@@ -89,7 +163,7 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   passwordResetButton: {
-    backgroundColor: '#2ecc71', // Green button background for the password reset screen
+    backgroundColor: '#2ecc71',
     padding: 10,
     borderRadius: 5,
     width: '100%',
@@ -105,36 +179,185 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   passwordResetCancelButtonText: {
-    color: '#000', // Black color for the cancel button text
+    color: '#000',
     fontSize: 16,
   },
 
-  // Text styles
-  title: {
-    fontSize: 28,
+  // =======================
+  // ===== Button Styles =====
+  // =======================
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff', // White color for the title to stand out against the blue background
-    textAlign: 'center',
-    marginBottom: 40, // Adjust the spacing to match the prototype
-    marginTop: 30, // Move the title closer to the top
   },
+  saveButton: {
+    backgroundColor: '#3498db',
+    padding: 12,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
+    width: '60%',
+    alignSelf: 'flex-start',
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  logoutButton: {
+    backgroundColor: '#e74c3c',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 10,
+    width: '80%',
+    alignSelf: 'center',
+  },
+  logoutText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  editButton: {
+    backgroundColor: '#3498db',
+    padding: 10,
+    borderRadius: 20,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  editButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  // =======================
+  // ===== Home Styles =====
+  // =======================
+  homeContainer: {
+    flexGrow: 1,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    padding: 20,
+  },
+  homeTitle: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#3A6BD8',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  homeImage: {
+    width: '100%',
+    height: width * 0.7,
+    resizeMode: 'contain',
+    marginBottom: 20,
+  },
+  homeButton: {
+    backgroundColor: '#3A6BD8',
+    paddingVertical: 15,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  homeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  homeLinkButton: {
+    width: '80%',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#27ae60',
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  homeLinkText: {
+    color: '#2ecc71',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
+  // =======================
+  // ===== Result Styles =====
+  // =======================
+  resultCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
+    marginHorizontal: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    width: '95%',
+    alignSelf: 'center',
+  },
+  resultInfoLabel: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 5,
+  },
+  resultInfoText: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 10,
+  },
+  resultLinkText: {
+    color: '#3498db',
+    textDecorationLine: 'underline',
+    fontSize: 14,
+    marginBottom: 10,
+  },
+
+  // =======================
+  // ===== Footer Styles =====
+  // =======================
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    paddingVertical: 8,
+    backgroundColor: '#FFFFFF',
+  },
+  footerItem: {
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    flexDirection: 'column',
+  },
+  footerText: {
+    fontSize: 12,
+    color: '#7f8c8d',
+    marginTop: 4,
+  },
+
+  // =======================
+  // ===== Miscellaneous Styles =====
+  // =======================
   subtitle: {
     fontSize: 16,
     color: '#7f8c8d',
     textAlign: 'center',
     marginBottom: 20,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
   linkText: {
-    color: '#ffffff', // White text for links
+    color: '#ffffff',
     textAlign: 'center',
     marginTop: 'auto',
-    marginBottom: 50, // Increase margin to move the text further down
+    marginBottom: 50,
   },
   whiteText: {
     color: '#fff',
@@ -145,139 +368,16 @@ export const styles = StyleSheet.create({
   grayText: {
     color: '#7f8c8d',
   },
-  logoutText: {
-    color: '#3498db', // Blue color for logout text in the footer
-    fontWeight: 'bold',
-  },
-  infoLabel: {
-    fontWeight: 'bold',
+  deleteText: {
     fontSize: 16,
-    color: '#333', // Dark color for labels inside the cards
-    marginBottom: 3,
-  },
-  infoText: {
-    fontSize: 14, // Reduced font size to make text fit better
-    color: '#555', // Slightly lighter color for the information text
-  },
-  infoLabelWhite: {
+    color: '#e74c3c',
     fontWeight: 'bold',
-    fontSize: 18,
-    marginTop: 10,
-    color: '#fff', // White color for labels inside the blue section
-  },
-  infoTextWhite: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: '#fff', // White color for text inside the blue section
-  },
-  headerTitle: {
-    color: '#fff', // White color for the header title
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center', // Centered text
+    textAlign: 'center',
   },
 
-  // Input styles
-  input: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 20,
-    width: '100%',
-    height: 40,
-  },
-
-  // Button styles
-  button: {
-    backgroundColor: '#2ecc71', // Green button to match the prototype
-    paddingVertical: 15,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
-    marginVertical: 10, // Ensure consistent margin
-  },
-  greenButton: {
-    backgroundColor: '#2ecc71',
-    paddingVertical: 12,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-
-  // Image styles
-  image: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
-    marginBottom: 20,
-  },
-
-  // Footer styles
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    paddingVertical: 8, // Reduced padding to make footer more compact
-    backgroundColor: '#fff', // White background for the footer
-    position: 'absolute',
-    bottom: 0, // Footer at the bottom
-    left: 0,
-    right: 0,
-  },
-  footerItem: {
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: 12,
-    color: '#7f8c8d',
-  },
-
-  // Header styles
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#007bff', // Blue background for the header
-  },
-  headerCenter: {
-    flex: 1, // Center the title in the header
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backButton: {
-    marginRight: 10,
-  },
-
-  // Card styles
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15, // Padding inside cards
-    marginVertical: 5, // Vertical margin between cards
-    marginHorizontal: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 4,
-  },
-
-  // Info section styles
-  infoSection: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc', // Added borders for better separation
-  },
-  scrollContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 80, // Ensure footer doesn't overlap content
-  },
+  // =======================
+  // ===== FAQ Styles =====
+  // =======================
   faqItem: {
     marginBottom: 20,
   },
@@ -302,250 +402,96 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  infoContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  editButton: {
-    backgroundColor: '#3498db',
-    padding: 10,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  logoutButton: {
-    backgroundColor: '#e74c3c',
-    padding: 10,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
-  },
-  scrollView: {
-    flex: 1,
-  },
 
-  // Link Button Styles (for the green link with the rectangular box)
-  linkButton: {
-    borderColor: '#2ecc71', // Green border to match the prototype
-    borderWidth: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginTop: 20,
-    alignItems: 'center',
-  },
-
-  // Specific for Login Screen spacing
-  loginLinkContainer: {
-    marginTop: 40, // Space between login button and Forgot Password link
-    marginBottom: 10, // Space between Forgot Password link and Signup link
-  },
-  signupLink: {
-    marginBottom: 50, // Space to push the Signup link to the bottom
-    textAlign: 'center',
-    color: '#ffffff',
-    fontWeight: 'bold',
-  },
-
-  // Search Screen specific styles
-  searchContainer: {
-    flex: 1,
-    backgroundColor: '#FFFFFF', // White background for the search screen
-    justifyContent: 'flex-start',
-  },
-  searchTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFFFFF', // White color for the title to stand out against the blue background
-    textAlign: 'center',
-    marginVertical: 10, // Adjust spacing around the title
-    backgroundColor: '#3A6BD8', // Blue background similar to the prototype
-    paddingVertical: 20, // Increase padding for better appearance
-    width: '100%', // Stretch across the screen
-  },
-  searchImage: {
-    width: '100%',
-    height: 150,
-    resizeMode: 'cover',
-    marginBottom: 20,
-  },
-
-  // Saved screen styles
-  savedContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  savedTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  placeholder: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#888',
-  },
-
-  // Profile screen styles
+  // =======================
+  // ===== Profile Styles =====
+  // =======================
   profileContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
-  },
-  profileTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 40,
-    marginTop: 30,
-    color: '#fff', // White color for the title
+    backgroundColor: '#FFFFFF',
   },
   profileInfoContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    padding: 20,
   },
   profileInfoText: {
     fontSize: 18,
-    color: '#fff', // White color for the info text
-  },
-  profileEditButton: {
-    backgroundColor: '#3498db',
-    padding: 10,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
+    color: '#333',
     marginBottom: 10,
   },
-  profileLogoutButton: {
-    backgroundColor: '#e74c3c',
-    padding: 10,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
-  },
 
-  // Help screen styles
-  helpContainer: {
+  // =======================
+  // ===== Edit Profile Styles =====
+  // =======================
+  editProfileContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF', // White background for the help screen
+    backgroundColor: '#FFFFFF',
+  },
+  editProfileInfoContainer: {
+    width: '100%',
     padding: 20,
   },
-  helpTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#000', // Black color for the title text
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  faqItem: {
-    marginBottom: 20,
-  },
-  faqQuestion: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  faqAnswer: {
-    fontSize: 16,
-    color: '#666', // Grey color for the FAQ answers
-  },
-  contactButton: {
-    backgroundColor: '#3498db',
+  editProfileInput: {
+    width: '100%',
     padding: 15,
+    marginBottom: 15,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    fontSize: 16,
+    color: '#333',
+  },
+  editProfileButton: {
+    backgroundColor: '#3498db',
+    paddingVertical: 15,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  editProfileButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  // =======================
+  // ===== Error Text Style =====
+  // =======================
+  errorText: {
+    color: '#ffff',
+    fontSize: 14,
+    marginBottom: 10,
+    alignSelf: 'flex-start',
+    marginLeft: 15,
+  },
+
+  // =======================
+  // ===== Loading Container Style =====
+  // =======================
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoutButton: {
+    backgroundColor: '#e74c3c',  // Roșu
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
   },
-  contactButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  logoutText: {
+    color: '#FFFFFF',
     fontWeight: 'bold',
-  },
-
-  // Result screen styles
-  resultContainer: {
-    flex: 1,
-    backgroundColor: '#FFFFFF', // White background for the result screen
-    padding: 20,
-  },
-  resultTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#000', // Black color for the title text
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  resultInfoContainer: {
-    marginBottom: 20,
-  },
-  resultInfoLabel: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#333', // Dark color for the labels
-    marginBottom: 5,
-  },
-  resultInfoText: {
-    fontSize: 14,
-    color: '#555', // Slightly lighter color for the info text
-  },
-  resultImage: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
-    marginBottom: 20,
-  },
-  resultFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    paddingVertical: 8,
-    backgroundColor: '#fff',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  resultFooterItem: {
-    alignItems: 'center',
-  },
-  resultFooterText: {
-    fontSize: 12,
-    color: '#7f8c8d',
-  },
-
-  // Collapsible component styles
-  collapsibleHeading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  collapsibleContent: {
-    marginTop: 6,
-    marginLeft: 24,
-  },
-
-  // Navigation Tab Bar Icon styles
-  tabBarIcon: {
-    marginBottom: -3,
-  },
-
-  // Parallax Scroll View styles
-  parallaxContainer: {
-    flex: 1,
-  },
-  parallaxHeader: {
-    height: 250,
-    overflow: 'hidden',
-  },
-  parallaxContent: {
-    flex: 1,
-    padding: 32,
-    gap: 16,
-    overflow: 'hidden',
-  },
+  }
+  
 });

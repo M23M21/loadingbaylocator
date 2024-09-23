@@ -1,6 +1,7 @@
+// app/(tabs)/_layout.tsx
+
 import { Tabs } from 'expo-router';
 import React from 'react';
-
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -12,8 +13,9 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+        headerShown: false, // Ascunde header-ul din taburi
+      }}
+    >
       <Tabs.Screen
         name="home"
         options={{
@@ -32,7 +34,6 @@ export default function TabLayout() {
           ),
         }}
       />
-     
       <Tabs.Screen
         name="saved"
         options={{
@@ -42,7 +43,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      
       <Tabs.Screen
         name="profile"
         options={{
@@ -52,7 +52,7 @@ export default function TabLayout() {
           ),
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="help"
         options={{
           title: 'Help',

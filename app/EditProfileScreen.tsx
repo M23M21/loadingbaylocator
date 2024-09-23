@@ -1,78 +1,94 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { auth, firestore } from '../services/firebase'; // Ensure the correct path
+import { firestore } from '../services/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { styles } from '../styles/globalStyles'; // Import your global styles
+import { useAuth } from '../AuthContext';
+import { styles } from '../styles/globalStyles';
 
-export default function EditProfileScreen() {
+const EditProfileScreen = () => {
+  const { user } = useAuth();
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        try {
-          const userDoc = doc(firestore, 'users', user.uid);
-          const userSnapshot = await getDoc(userDoc);
-          if (userSnapshot.exists()) {
-            const data = userSnapshot.data();
-            setName(data.name || ''); // Provide a default empty string if name is undefined
-            setEmail(data.email || ''); // Provide a default empty string if email is undefined
-          }
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            Alert.alert('Error', error.message);
-          } else {
-            Alert.alert('Error', 'An unknown error occurred while fetching data');
-          }
+      if (!user) {
+        Alert.alert('Error', 'User not logged in.');
+        router.replace('/(auth)/LoginScreen');
+        return;
+      }
+      try {
+        const userDoc = doc(firestore, 'users', user.uid);
+        const userSnapshot = await getDoc(userDoc);
+        if (userSnapshot.exists()) {
+          const data = userSnapshot.data();
+          setName(data.name);
+          setEmail(data.email);
         }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        Alert.alert('Error', 'Failed to load user data.');
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [user]);
 
   const handleSave = async () => {
-    const user = auth.currentUser;
-    if (user) {
-      try {
-        const userDoc = doc(firestore, 'users', user.uid);
-        await updateDoc(userDoc, { name, email });
-        Alert.alert('Success', 'Profile updated successfully');
-        router.replace('/home'); // Navigate back to the home screen after saving
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          Alert.alert('Error', error.message);
-        } else {
-          Alert.alert('Error', 'An unknown error occurred while updating the profile');
-        }
-      }
+    if (!user) {
+      Alert.alert('Error', 'User not logged in.');
+      router.replace('/(auth)/LoginScreen');
+      return;
+    }
+    if (!name || !email) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+    try {
+      const userDoc = doc(firestore, 'users', user.uid);
+      await updateDoc(userDoc, {
+        name,
+        email,
+      });
+      Alert.alert('Success', 'Profile updated successfully');
+      router.replace('/(tabs)/home');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      Alert.alert('Error', 'Failed to update profile.');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Edit Profile</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSave}>
-        <Text style={styles.buttonText}>Save</Text>
-      </TouchableOpacity>
+      {/* Header */}
+      <View style={styles.commonHeader}>
+        <Text style={styles.commonHeaderTitle}>Edit Profile</Text>
+      </View>
+
+      {/* Content */}
+      <View style={styles.editProfileInfoContainer}>
+        <TextInput
+          style={styles.editProfileInput}
+          placeholder="Full Name"
+          value={name}
+          onChangeText={setName}
+        />
+        <TextInput
+          style={styles.editProfileInput}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TouchableOpacity style={styles.editProfileButton} onPress={handleSave}>
+          <Text style={styles.editProfileButtonText}>Save</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
-}
+};
+
+export default EditProfileScreen;

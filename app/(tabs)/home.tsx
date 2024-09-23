@@ -1,84 +1,58 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import { firestore } from '../../services/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { styles } from '../../styles/globalStyles';  // Import global styles
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Image, ScrollView, Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { styles } from '../../styles/globalStyles';
 
-type LoadingBayInfo = {
-  id: string;
-  directions: string;
-  location: string;
-  name: string;
-  openingTime: string;
-  restrictions: string;
-  town: string;
-  what3words: string;
-};
-
-export default function HomeScreen() {
+export default function Home() {
   const [shopName, setShopName] = useState('');
-  const [town, setTown] = useState('');
-  const router = useRouter();
+  const [location, setLocation] = useState('');
 
-  const handleSearch = async () => {
+  useEffect(() => {
+    const clearSearchData = async () => {
+      await AsyncStorage.removeItem('shopName');
+      await AsyncStorage.removeItem('location');
+    };
+    clearSearchData(); // Clear previous search data when Home is loaded
+  }, []);
+
+  const saveSearchData = async () => {
     try {
-      const results: LoadingBayInfo[] = [];
-      const q = query(
-        collection(firestore, 'loadingBays'),
-        where('name', '==', shopName),
-        where('town', '==', town)
-      );
-
-      console.log('Executing query with:', { shopName, town });
-
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        console.log('Document data:', doc.data());
-        results.push({ id: doc.id, ...doc.data() } as LoadingBayInfo);
-      });
-
-      console.log('Results:', results);
-
-      if (results.length > 0) {
-        router.push({
-          pathname: '/ResultScreen',
-          params: { results: JSON.stringify(results) },
-        });
-      } else {
-        Alert.alert('No Results', 'No matching loading bays found.');
+      if (shopName.trim() && location.trim()) {
+        await AsyncStorage.setItem('shopName', shopName.trim());
+        await AsyncStorage.setItem('location', location.trim());
       }
     } catch (error) {
-      console.error('Error searching Firestore:', error);
-      Alert.alert('Error', 'An error occurred while searching. Please try again.');
+      console.error('Error saving search data:', error);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Loading Bay Locator</Text>
-      <Image
-        source={require('../../assets/images/loading-bay.jpg')}
-        style={styles.image}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter shop/warehouse name..."
-        value={shopName}
-        onChangeText={setShopName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter town name..."
-        value={town}
-        onChangeText={setTown}
-      />
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={handleSearch}
-      >
-        <Text style={styles.buttonText}>Search</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <View style={styles.commonHeader}>
+        <Text style={styles.commonHeaderTitle}>Loading Bay Locator</Text>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.homeContainer}>
+        <Image source={require('../../assets/images/loading-bay.jpg')} style={styles.homeImage} />
+        <View style={{ width: '100%', paddingHorizontal: 20 }}>
+          <TextInput
+            style={styles.authInput}
+            placeholder="Warehouse / Shop"
+            value={shopName}
+            onChangeText={setShopName}
+            onBlur={saveSearchData}
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.authInput}
+            placeholder="Town / Postcode"
+            value={location}
+            onChangeText={setLocation}
+            onBlur={saveSearchData}
+            autoCapitalize="none"
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 }

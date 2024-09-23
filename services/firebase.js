@@ -1,7 +1,10 @@
-// services/firebase.js
+// Filename: services/firebase.js
+
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore'; // or getDatabase for Realtime Database
+import { getFirestore } from 'firebase/firestore';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth/react-native';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyANg6pLx0zR5Ajg4FFjFDPvaxPNy1O2njU",
@@ -12,29 +15,25 @@ const firebaseConfig = {
   appId: "1:836229091487:web:45453d6bb97f00ce1892aa",
   measurementId: "G-SRQMY42FM6"
 };
-import { sendPasswordResetEmail } from 'firebase/auth';
 
-const handlePasswordReset = () => {
-  if (!email) {
-    Alert.alert('Error', 'Please enter your email address');
-    return;
-  }
+const app = initializeApp(firebaseConfig);
 
+// Inițializează auth cu persistență folosind AsyncStorage
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage)
+});
+
+const firestore = getFirestore(app);
+
+const handlePasswordReset = (email, router) => {
   sendPasswordResetEmail(auth, email)
     .then(() => {
-      Alert.alert('Success', 'Password reset email sent');
-      router.back();
+      console.log('Success: Password reset email sent');
+      if (router) router.back(); // Doar dacă router este definit
     })
     .catch((error) => {
-      Alert.alert('Error', error.message);
+      console.error('Error:', error.message);
     });
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase services
-const auth = getAuth(app);
-const firestore = getFirestore(app); // or use getDatabase for Realtime Database
-
-export { auth, firestore };
+export { auth, firestore, handlePasswordReset };
