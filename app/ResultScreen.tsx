@@ -62,7 +62,7 @@ const ResultScreen = () => {
           id: doc.id, // Access the document ID
           ...doc.data() as LoadingBayInfo, // Cast the document data to LoadingBayInfo
         }));
-
+        
         setLoadingBays(baysData);
       } catch (error) {
         console.error('Error fetching loading bays:', error);
@@ -85,6 +85,10 @@ const ResultScreen = () => {
       Alert.alert('Error', 'Invalid what3words link.');
     }
   };
+
+  function handleSaveLoadingBay(arg0: LoadingBayInfo) {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -146,9 +150,13 @@ const ResultScreen = () => {
           <Ionicons name="search-outline" size={24} color="#7f8c8d" />
           <Text style={styles.footerText}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.footerItem} onPress={() => router.push('/(tabs)/saved')}>
-          <Ionicons name="bookmark-outline" size={24} color="#7f8c8d" />
-          <Text style={styles.footerText}>Saved</Text>
+        <TouchableOpacity
+          style={styles.footerItem}
+          onPress={() => {
+            if (loadingBays.length > 0) handleSaveLoadingBay(loadingBays[0]);
+          }}
+        >
+          <Ionicons name="bookmark" size={24} color="#3498db" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.footerItem} onPress={() => router.push('/(tabs)/profile')}>
           <Ionicons name="person-outline" size={24} color="#7f8c8d" />

@@ -50,7 +50,7 @@ const PasswordResetScreen: React.FC = () => {
       <Text style={styles.passwordResetSubtitle}>Enter your email to receive a password reset link.</Text>
       <TextInput
         style={styles.passwordResetInput}
-        placeholder="Enter your email..."
+        placeholder="Enter your email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"

@@ -60,12 +60,12 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.authContainer}>
-      <Text style={styles.authTitle}>Login</Text>
+      <Text style={styles.authTitle}>Log In</Text>
 
       {/* Email input */}
       <TextInput
         style={styles.authInput}
-        placeholder="Enter email..."
+        placeholder="Enter email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -76,7 +76,7 @@ const LoginScreen = () => {
       {/* Password input */}
       <TextInput
         style={styles.authInput}
-        placeholder="Enter password..."
+        placeholder="Enter password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -85,7 +85,7 @@ const LoginScreen = () => {
 
       {/* Login button */}
       <TouchableOpacity style={styles.authButton} onPress={handleLogin}>
-        <Text style={styles.buttonText}>LOGIN</Text>
+        <Text style={styles.buttonText}>LOG IN</Text>
       </TouchableOpacity>
 
       {/* Links */}
@@ -96,7 +96,7 @@ const LoginScreen = () => {
       </View>
 
       <TouchableOpacity onPress={() => router.replace('/(auth)/SignupScreen')}>
-        <Text style={styles.signupLink}>SIGNUP</Text>
+        <Text style={styles.signupLink}>SIGN UP</Text>
       </TouchableOpacity>
     </View>
   );

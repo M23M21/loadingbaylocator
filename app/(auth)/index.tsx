@@ -24,7 +24,7 @@ export default function AuthIndex() {
         style={styles.homeImage}
       />
       <TouchableOpacity style={styles.homeButton} onPress={handleSignupPress}>
-        <Text style={styles.homeButtonText}>SIGNUP</Text>
+        <Text style={styles.homeButtonText}>SIG NUP</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.homeLinkButton} onPress={handleLoginPress}>
         <Text style={styles.homeLinkText}>ALREADY HAVE AN ACCOUNT?</Text>
