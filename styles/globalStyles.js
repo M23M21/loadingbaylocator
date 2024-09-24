@@ -457,6 +457,37 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+    // Save Button Styles
+    saveButton: {
+      backgroundColor: '#3498db',
+      padding: 12,
+      borderRadius: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical: 10,
+      width: '60%',
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
+    },
+    saveButtonText: {
+      color: '#FFFFFF',
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginLeft: 8,
+    },
+    
+    // Delete Button Styles
+    deleteButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 10,
+    },
+    deleteText: {
+      fontSize: 16,
+      color: '#e74c3c',
+      fontWeight: 'bold',
+      marginLeft: 8,
+    },
 
   // =======================
   // ===== Error Text Style =====
